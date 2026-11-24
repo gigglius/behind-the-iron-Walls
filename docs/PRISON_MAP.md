@@ -19,3 +19,13 @@ Room dimensions, wall positions, colors, and props are defined in `scripts/priso
 
 ## Testing status
 The files have been committed to the repository, but the scene has not yet been imported or run in Godot and has not been tested on a Quest 3 headset.
+
+
+## Interior detail pass
+- Each cell has a hinged barred door, frame, bunk, mattress, pillow, locker, shelf, and simple washroom fixtures.
+- The dining hall has a serving hatch and menu board; the kitchen has prep furniture, a sink, stove, and crates.
+- The workshop has stools and a notice board; laundry has tubs and folded linen; administration has filing cabinets and chairs.
+- The courtyard has a notice board and water fountain.
+- Seven named NPCs are positioned in the courtyard, dining hall, kitchen, workshop, laundry, cell block, and exercise yard. They use the same dialogue interaction as the original character.
+
+Cell doors use `scripts/cell_door.gd` and the normal interact input. NPC appearance and dialogue are configured in `scripts/npc.gd` and `scenes/Main.tscn`.
