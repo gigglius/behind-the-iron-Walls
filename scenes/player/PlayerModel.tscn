@@ -1,96 +1,142 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="Script" path="res://scripts/player_customization.gd" id="1_customization"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_Uniform"]
 albedo_color = Color(0.36, 0.39, 0.34, 1)
 roughness = 0.95
-
 [sub_resource type="StandardMaterial3D" id="Mat_Shirt"]
 albedo_color = Color(0.62, 0.58, 0.46, 1)
 roughness = 0.9
-
 [sub_resource type="StandardMaterial3D" id="Mat_Boots"]
 albedo_color = Color(0.12, 0.11, 0.1, 1)
 roughness = 1.0
-
 [sub_resource type="StandardMaterial3D" id="Mat_Skin"]
 albedo_color = Color(0.68, 0.48, 0.36, 1)
 roughness = 0.9
-
 [sub_resource type="StandardMaterial3D" id="Mat_Belt"]
 albedo_color = Color(0.16, 0.14, 0.11, 1)
 roughness = 1.0
-
+[sub_resource type="StandardMaterial3D" id="Mat_Hair"]
+albedo_color = Color(0.12, 0.075, 0.045, 1)
+roughness = 0.95
+[sub_resource type="StandardMaterial3D" id="Mat_FaceDetail"]
+albedo_color = Color(0.08, 0.055, 0.04, 1)
+[sub_resource type="StandardMaterial3D" id="Mat_Glasses"]
+albedo_color = Color(0.025, 0.025, 0.025, 1)
 [sub_resource type="BoxMesh" id="TorsoMesh"]
 size = Vector3(0.48, 0.62, 0.26)
 material = SubResource("Mat_Uniform")
-
 [sub_resource type="CapsuleMesh" id="ArmMesh"]
 radius = 0.085
 height = 0.62
 material = SubResource("Mat_Shirt")
-
 [sub_resource type="CapsuleMesh" id="LegMesh"]
 radius = 0.105
 height = 0.72
 material = SubResource("Mat_Uniform")
-
 [sub_resource type="BoxMesh" id="BootMesh"]
 size = Vector3(0.16, 0.13, 0.28)
 material = SubResource("Mat_Boots")
-
 [sub_resource type="BoxMesh" id="BeltMesh"]
 size = Vector3(0.5, 0.07, 0.29)
 material = SubResource("Mat_Belt")
-
 [sub_resource type="SphereMesh" id="HandMesh"]
 radius = 0.085
 height = 0.17
 material = SubResource("Mat_Skin")
+[sub_resource type="SphereMesh" id="HeadMesh"]
+radius = 0.16
+height = 0.38
+material = SubResource("Mat_Skin")
+[sub_resource type="SphereMesh" id="HairMesh"]
+radius = 0.165
+height = 0.20
+material = SubResource("Mat_Hair")
+[sub_resource type="BoxMesh" id="DetailMesh"]
+size = Vector3(0.12, 0.045, 0.035)
+material = SubResource("Mat_FaceDetail")
 
 [node name="PrisonerPlayerModel" type="Node3D"]
 script = ExtResource("1_customization")
-## Stylized 1960s prison uniform. Head intentionally omitted for first-person VR comfort.
 
 [node name="Torso" type="MeshInstance3D" parent="."]
 position = Vector3(0, 1.12, 0)
 mesh = SubResource("TorsoMesh")
-
 [node name="Belt" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.83, 0)
 mesh = SubResource("BeltMesh")
-
 [node name="LeftArm" type="MeshInstance3D" parent="."]
 position = Vector3(-0.31, 1.04, 0)
 rotation_degrees = Vector3(0, 0, -9)
 mesh = SubResource("ArmMesh")
-
 [node name="RightArm" type="MeshInstance3D" parent="."]
 position = Vector3(0.31, 1.04, 0)
 rotation_degrees = Vector3(0, 0, 9)
 mesh = SubResource("ArmMesh")
-
 [node name="LeftHand" type="MeshInstance3D" parent="."]
 position = Vector3(-0.34, 0.71, 0)
 mesh = SubResource("HandMesh")
-
 [node name="RightHand" type="MeshInstance3D" parent="."]
 position = Vector3(0.34, 0.71, 0)
 mesh = SubResource("HandMesh")
-
 [node name="LeftLeg" type="MeshInstance3D" parent="."]
 position = Vector3(-0.13, 0.43, 0)
 mesh = SubResource("LegMesh")
-
 [node name="RightLeg" type="MeshInstance3D" parent="."]
 position = Vector3(0.13, 0.43, 0)
 mesh = SubResource("LegMesh")
-
 [node name="LeftBoot" type="MeshInstance3D" parent="."]
 position = Vector3(-0.13, 0.1, -0.045)
 mesh = SubResource("BootMesh")
-
 [node name="RightBoot" type="MeshInstance3D" parent="."]
 position = Vector3(0.13, 0.1, -0.045)
 mesh = SubResource("BootMesh")
+
+[node name="Head" type="Node3D" parent="."]
+position = Vector3(0, 1.56, 0)
+visible = false
+[node name="HeadMesh" type="MeshInstance3D" parent="Head"]
+mesh = SubResource("HeadMesh")
+[node name="HairShort" type="MeshInstance3D" parent="Head"]
+position = Vector3(0, 0.105, 0)
+mesh = SubResource("HairMesh")
+[node name="HairPart" type="MeshInstance3D" parent="Head"]
+position = Vector3(0, 0.11, 0)
+scale = Vector3(1, 0.85, 1)
+mesh = SubResource("HairMesh")
+[node name="HairBuzz" type="MeshInstance3D" parent="Head"]
+position = Vector3(0, 0.09, 0)
+scale = Vector3(1, 0.65, 1)
+mesh = SubResource("HairMesh")
+[node name="HairTop" type="MeshInstance3D" parent="Head"]
+position = Vector3(0, 0.11, 0)
+mesh = SubResource("HairMesh")
+visible = false
+[node name="EyeLeft" type="MeshInstance3D" parent="Head"]
+position = Vector3(-0.055, 0.015, -0.135)
+scale = Vector3(0.16, 0.16, 0.08)
+mesh = SubResource("DetailMesh")
+[node name="EyeRight" type="MeshInstance3D" parent="Head"]
+position = Vector3(0.055, 0.015, -0.135)
+scale = Vector3(0.16, 0.16, 0.08)
+mesh = SubResource("DetailMesh")
+[node name="FaceClean" type="Node3D" parent="Head"]
+[node name="FaceMoustache" type="MeshInstance3D" parent="Head"]
+position = Vector3(0, -0.055, -0.15)
+scale = Vector3(0.8, 0.55, 0.5)
+mesh = SubResource("DetailMesh")
+[node name="FaceStubble" type="MeshInstance3D" parent="Head"]
+position = Vector3(0, -0.09, -0.12)
+scale = Vector3(0.95, 0.5, 0.55)
+mesh = SubResource("DetailMesh")
+[node name="AccessoryNone" type="Node3D" parent="Head"]
+[node name="AccessoryGlasses" type="MeshInstance3D" parent="Head"]
+position = Vector3(0, 0.02, -0.155)
+scale = Vector3(1.1, 0.55, 0.2)
+mesh = SubResource("DetailMesh")
+material_override = SubResource("Mat_Glasses")
+[node name="AccessoryCap" type="MeshInstance3D" parent="Head"]
+position = Vector3(0, 0.16, 0)
+scale = Vector3(1.15, 0.35, 1.1)
+mesh = SubResource("HairMesh")
