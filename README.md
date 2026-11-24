@@ -10,7 +10,7 @@ A fictional, stylized first-person exploration game for Meta Quest 3, built with
 
 This starter deliberately contains no weapon or combat system. Guards are represented as patrol / conversation / checkpoint characters; being caught can return the player to a safe checkpoint.
 
-## Player character\nThe player now has a low-poly 1960s prisoner uniform model attached to the player rig. The head is intentionally omitted so it does not obstruct the first-person VR camera. The model is built from lightweight Godot primitive meshes for easy replacement with a rigged animated character later.\n\n## Project layout
+## Player character\nThe player now has a low-poly 1960s prisoner uniform model attached to the player rig. The head is intentionally omitted so it does not obstruct the first-person VR camera. Open the appearance panel with **C** in the current desktop prototype to cycle uniform, shirt, skin, and boot colors. These options are applied to the model at runtime; the VR customization interface still needs to be moved into a world-space panel for Quest 3.\n\n## Project layout
 - `scenes/` – game scenes
 - `scripts/` – player, interaction, food, and game-state logic
 - `assets/` – add original models, textures, audio, and fonts here
