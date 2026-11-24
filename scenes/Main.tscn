@@ -75,6 +75,7 @@ position = Vector3(0, 0.65, 0)
 current = true
 
 [node name="XROrigin3D" type="XROrigin3D" parent="Player"]
+position = Vector3(0, -1, 0)
 
 [node name="XRCamera3D" type="XRCamera3D" parent="Player/XROrigin3D"]
 current = false
