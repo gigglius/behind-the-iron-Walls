@@ -1,0 +1,34 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/game_manager.gd" id="1_manager"]
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_manager")
+
+[node name="Environment" type="WorldEnvironment" parent="."]
+
+[node name="PrisonBlock" type="Node3D" parent="."]
+position = Vector3(0, 0, -5)
+
+[node name="CourtyardFloor" type="MeshInstance3D" parent="PrisonBlock"]
+mesh = PlaneMesh.new()
+scale = Vector3(16, 1, 16)
+
+[node name="NorthWall" type="StaticBody3D" parent="PrisonBlock"]
+position = Vector3(0, 2, -8)
+
+[node name="WallMesh" type="MeshInstance3D" parent="PrisonBlock/NorthWall"]
+mesh = BoxMesh.new()
+scale = Vector3(16, 4, 0.4)
+
+[node name="Player" type="CharacterBody3D" parent="."]
+position = Vector3(0, 1, 2)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+shape = CapsuleShape3D.new()
+
+[node name="Head" type="Node3D" parent="Player"]
+position = Vector3(0, 0.65, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Player/Head"]
+current = true
