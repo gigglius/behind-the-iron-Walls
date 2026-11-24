@@ -1,16 +1,41 @@
 ; Engine configuration file.
-; Starter project for Godot 4.x
 config_version=5
 
 [application]
 config/name="1960: Behind the Iron Walls"
 run/main_scene="res://scenes/Main.tscn"
 
+[display]
+window/size/viewport_width=1280
+window/size/viewport_height=720
+
+[input]
+move_left={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":65)]
+}
+move_right={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":68)]
+}
+move_forward={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":87)]
+}
+move_back={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":83)]
+}
+interact={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":69)]
+}
+eat_food={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":70)]
+}
+
 [rendering]
 renderer/rendering_method="mobile"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/default_filters/use_nearest_mipmap_filter=false
-
-[display]
-window/size/viewport_width=1280
-window/size/viewport_height=720
