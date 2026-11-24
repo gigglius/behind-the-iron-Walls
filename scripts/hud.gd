@@ -11,7 +11,7 @@ var customization_open := false
 var customization_model: Node
 var customization_labels := {}
 var job_ids := ["kitchen", "laundry", "library", "workshop", "gardener"]
-var customization_categories := ["uniform", "shirt", "skin", "boots"]
+var customization_categories := ["uniform", "shirt", "skin", "boots", "hair_style", "hair_color", "face", "accessory"]
 
 func _ready() -> void:
 	customization_model = get_tree().current_scene.get_node_or_null("Player/PlayerModel")
