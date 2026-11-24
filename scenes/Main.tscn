@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="1_manager"]
 [ext_resource type="Script" path="res://scripts/food_system.gd" id="2_food"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://scripts/work_office.gd" id="6_office"]
 [ext_resource type="Script" path="res://scripts/work_station.gd" id="7_station"]
 [ext_resource type="Script" path="res://scripts/npc.gd" id="8_npc"]
+[ext_resource type="Script" path="res://scripts/bread_pickup.gd" id="9_bread"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_manager")
@@ -100,3 +101,7 @@ position = Vector3(2, 1, 1)
 script = ExtResource("8_npc")
 character_name = "Mikhail"
 opening_line = "I work in the library. The work office has a job board if you need a position."
+
+[node name="BreadPickup" type="Area3D" parent="."]
+position = Vector3(-2, 0.5, 1)
+script = ExtResource("9_bread")
