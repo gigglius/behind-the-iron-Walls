@@ -37,3 +37,7 @@ VR controller input and hand tracking are intentionally left as the next impleme
 
 ## Prison map
 A connected low-poly prison greybox now includes the central courtyard, cell block, dining hall, kitchen, workshop, laundry, administration, and exercise yard. See [docs/PRISON_MAP.md](docs/PRISON_MAP.md) for the layout and editing notes.
+
+
+## Prison interiors, doors, and characters
+Cell doors now swing open and closed when targeted and interacted with. Cell spaces have bunks, mattresses, pillows, lockers, shelves, and basic washroom fixtures. Dining, kitchen, workshop, laundry, and administration spaces have additional furniture and props. Seven named low-poly NPCs are placed around the complex and can be spoken to using the existing interaction system.
