@@ -17,6 +17,7 @@ func _ready() -> void:
     sign_mat = _mat(Color(0.72, 0.68, 0.53))
     _build_courtyard()
     _build_cell_block()
+    _build_room_details()
     _build_cafeteria()
     _build_kitchen()
     _build_workshop()
@@ -130,6 +131,63 @@ func _build_cell_block() -> void:
             _box(self, "CellPartition", Vector3(x, 1.5, z + (1.3 if row == 0 else -1.3)), Vector3(0.12, 3.0, 2.5), concrete)
             _box(self, "Bunk", Vector3(x + 0.55, 0.55, z + (0.55 if row == 0 else -0.55)), Vector3(1.0, 0.25, 1.8), metal)
             _box(self, "Mattress", Vector3(x + 0.55, 0.72, z + (0.55 if row == 0 else -0.55)), Vector3(0.9, 0.12, 1.65), wood, false)
+            _box(self, "Pillow", Vector3(x + 0.55, 0.82, z + (1.18 if row == 0 else -1.18)), Vector3(0.55, 0.12, 0.35), sign_mat, false)
+            _box(self, "CellLocker", Vector3(x - 0.65, 1.0, z + (0.55 if row == 0 else -0.55)), Vector3(0.35, 1.8, 0.45), metal)
+            _box(self, "CellShelf", Vector3(x + 0.55, 1.35, z), Vector3(0.9, 0.12, 0.25), wood)
+            var door_z := -26.25 if row == 0 else -17.75
+            _box(self, "CellDoorFrameLeft", Vector3(x - 0.85, 1.2, door_z), Vector3(0.12, 2.4, 0.18), metal)
+            _box(self, "CellDoorFrameRight", Vector3(x + 0.85, 1.2, door_z), Vector3(0.12, 2.4, 0.18), metal)
+            _make_cell_door(x, door_z, row, i)
+            _box(self, "CellToiletBase", Vector3(x - 0.55, 0.28, z + (1.1 if row == 0 else -1.1)), Vector3(0.42, 0.35, 0.5), sign_mat)
+            _box(self, "CellToiletTank", Vector3(x - 0.55, 0.75, z + (1.3 if row == 0 else -1.3)), Vector3(0.42, 0.65, 0.2), sign_mat)
+
+
+func _make_cell_door(center_x: float, front_z: float, row: int, cell_index: int) -> void:
+    var trigger := Area3D.new()
+    trigger.name = "CellDoor_%d_%d" % [row, cell_index]
+    trigger.position = Vector3(center_x, 1.0, front_z)
+    trigger.set_script(load("res://scripts/cell_door.gd"))
+    add_child(trigger)
+    var trigger_shape := CollisionShape3D.new()
+    var sphere := SphereShape3D.new()
+    sphere.radius = 1.35
+    trigger_shape.shape = sphere
+    trigger.add_child(trigger_shape)
+    var hinge := Node3D.new()
+    hinge.name = "Hinge"
+    hinge.position = Vector3(-0.78, 0, 0)
+    trigger.add_child(hinge)
+    trigger.set("door_pivot_path", NodePath("Hinge"))
+    var leaf := StaticBody3D.new()
+    leaf.name = "DoorLeaf"
+    leaf.position = Vector3(0.78, 0, 0)
+    hinge.add_child(leaf)
+    _box(leaf, "DoorTopRail", Vector3(0, 1.08, 0), Vector3(1.56, 0.12, 0.12), metal)
+    _box(leaf, "DoorBottomRail", Vector3(0, -1.08, 0), Vector3(1.56, 0.12, 0.12), metal)
+    _box(leaf, "DoorSideRailA", Vector3(-0.72, 0, 0), Vector3(0.12, 2.16, 0.12), metal)
+    _box(leaf, "DoorSideRailB", Vector3(0.72, 0, 0), Vector3(0.12, 2.16, 0.12), metal)
+    for bar_index in range(7):
+        _box(leaf, "DoorBar", Vector3(-0.6 + bar_index * 0.2, 0, 0), Vector3(0.055, 2.0, 0.08), metal)
+
+func _build_room_details() -> void:
+    _box(self, "DiningServingHatch", Vector3(14, 1.65, -10.7), Vector3(3.2, 0.8, 0.18), metal)
+    _box(self, "DiningMenuBoard", Vector3(14, 2.55, -10.7), Vector3(2.8, 0.8, 0.12), wood)
+    _label(self, "DAILY MENU", Vector3(14, 2.5, -10.55), 0.35)
+    _box(self, "KitchenPrepTable", Vector3(11.0, 0.9, -15.5), Vector3(2.5, 0.18, 1.2), metal)
+    _box(self, "KitchenSink", Vector3(17.0, 0.9, -15.5), Vector3(1.6, 0.22, 0.9), sign_mat)
+    _box(self, "KitchenStove", Vector3(11.0, 0.65, -19.0), Vector3(2.2, 0.9, 1.0), dark_concrete)
+    for i in range(3):
+        _box(self, "FoodCrate", Vector3(16.0 + i * 0.55, 0.35, -19.0), Vector3(0.45, 0.65, 0.5), wood)
+    for x in [-17.0, -14.0, -11.0]:
+        _box(self, "WorkshopStool", Vector3(x, 0.45, -7.0), Vector3(0.55, 0.8, 0.55), wood)
+        _box(self, "LaundryTub", Vector3(x, 0.55, -14.0), Vector3(1.5, 1.0, 1.0), sign_mat)
+        _box(self, "FoldedLinen", Vector3(x, 1.0, -18.0), Vector3(0.75, 0.25, 0.75), sign_mat, false)
+    _box(self, "WorkshopNoticeBoard", Vector3(-14, 2.1, -10.7), Vector3(3.0, 1.2, 0.12), wood)
+    for x in [-3.5, 3.5]:
+        _box(self, "OfficeFilingCabinet", Vector3(x, 1.0, 5.5), Vector3(0.8, 2.0, 0.8), metal)
+        _box(self, "OfficeChair", Vector3(x * 0.5, 0.5, 8.0), Vector3(0.65, 0.9, 0.65), wood)
+    _box(self, "CourtyardNoticeBoard", Vector3(0, 1.7, -11.8), Vector3(2.4, 1.6, 0.15), wood)
+    _box(self, "WaterFountain", Vector3(6.0, 0.65, -4.0), Vector3(0.7, 1.3, 0.7), sign_mat)
 
 func _build_cafeteria() -> void:
     _room("Dining Hall", Vector3(14, 0, -5), Vector2(10, 12), "west_north")
