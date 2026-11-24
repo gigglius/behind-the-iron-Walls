@@ -1,5 +1,5 @@
 extends Node
-## Lightweight food meter. Starvation is a gentle checkpoint reset, not graphic harm.
+## Food portions are collected from pickups or earned by completing a work shift.
 
 signal food_changed(portions: int)
 signal needs_food
