@@ -8,7 +8,7 @@ extends Node3D
 @export var select_action: StringName = &"creator_select"
 @export var toggle_action: StringName = &"creator_toggle"
 var previous_toggle := false
-@export var player_model_path: NodePath = NodePath("../../Player/PlayerModel")
+@export var player_model_path: NodePath = NodePath("../../PlayerModel")
 
 const MODEL_SCENE: PackedScene = preload("res://scenes/player/PlayerModel.tscn")
 const CATEGORIES := [
@@ -109,6 +109,8 @@ func _refresh_labels() -> void:
 			labels[id].text = str(category["title"]) + ": " + str(player_model.get_customization_name(id))
 
 func _process(_delta: float) -> void:
+	if not visible:
+		return
 	var left_controller := get_node_or_null(left_controller_path) as XRController3D
 	var right_controller := get_node_or_null(right_controller_path) as XRController3D
 	if left_controller != null:
