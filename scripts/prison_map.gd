@@ -73,10 +73,10 @@ func _room(name: String, center: Vector3, dimensions: Vector2, door_side: String
     _box(room, "Floor", Vector3(0, -0.12, 0), Vector3(w, 0.24, d), floor_mat)
     var h := 3.8
     var t := 0.3
-    _wall_with_door(room, "North", Vector3(0, h * 0.5, -d * 0.5), w, h, t, (door_side == "north" or door_side == "north_south"), true)
-    _wall_with_door(room, "South", Vector3(0, h * 0.5, d * 0.5), w, h, t, (door_side == "south" or door_side == "north_south"), true)
-    _wall_with_door(room, "West", Vector3(-w * 0.5, h * 0.5, 0), d, h, t, door_side == "west", false)
-    _wall_with_door(room, "East", Vector3(w * 0.5, h * 0.5, 0), d, h, t, door_side == "east", false)
+    _wall_with_door(room, "North", Vector3(0, h * 0.5, -d * 0.5), w, h, t, door_side.split("_").has("north"), true)
+    _wall_with_door(room, "South", Vector3(0, h * 0.5, d * 0.5), w, h, t, door_side.split("_").has("south"), true)
+    _wall_with_door(room, "West", Vector3(-w * 0.5, h * 0.5, 0), d, h, t, door_side.split("_").has("west"), false)
+    _wall_with_door(room, "East", Vector3(w * 0.5, h * 0.5, 0), d, h, t, door_side.split("_").has("east"), false)
     _label(room, name.to_upper(), Vector3(0, 2.5, 0), 0.7)
 
 func _wall_with_door(parent: Node3D, side: String, center: Vector3, length: float, height: float, thickness: float, has_door: bool, horizontal: bool) -> void:
@@ -132,7 +132,7 @@ func _build_cell_block() -> void:
             _box(self, "Mattress", Vector3(x + 0.55, 0.72, z + (0.55 if row == 0 else -0.55)), Vector3(0.9, 0.12, 1.65), wood, false)
 
 func _build_cafeteria() -> void:
-    _room("Dining Hall", Vector3(14, 0, -5), Vector2(10, 12), "west")
+    _room("Dining Hall", Vector3(14, 0, -5), Vector2(10, 12), "west_north")
     for z in [-8.0, -5.0, -2.0]:
         _box(self, "DiningTable", Vector3(14, 0.85, z), Vector3(5.2, 0.18, 1.0), wood)
         for x in [11.8, 16.2]:
@@ -144,7 +144,7 @@ func _build_kitchen() -> void:
     _box(self, "KitchenShelf", Vector3(17.5, 1.8, -15), Vector3(0.5, 2.8, 3.0), wood)
 
 func _build_workshop() -> void:
-    _room("Workshop", Vector3(-14, 0, -5), Vector2(10, 12), "east")
+    _room("Workshop", Vector3(-14, 0, -5), Vector2(10, 12), "east_north")
     for z in [-8.0, -4.0, -1.0]:
         _box(self, "WorkshopBench", Vector3(-14, 0.85, z), Vector3(5.0, 0.18, 1.1), wood)
     _box(self, "ToolShelf", Vector3(-17.5, 1.5, -5), Vector3(0.4, 2.4, 5.0), metal)
