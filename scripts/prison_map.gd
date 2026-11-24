@@ -73,8 +73,8 @@ func _room(name: String, center: Vector3, dimensions: Vector2, door_side: String
     _box(room, "Floor", Vector3(0, -0.12, 0), Vector3(w, 0.24, d), floor_mat)
     var h := 3.8
     var t := 0.3
-    _wall_with_door(room, "North", Vector3(0, h * 0.5, -d * 0.5), w, h, t, door_side == "north", true)
-    _wall_with_door(room, "South", Vector3(0, h * 0.5, d * 0.5), w, h, t, door_side == "south", true)
+    _wall_with_door(room, "North", Vector3(0, h * 0.5, -d * 0.5), w, h, t, (door_side == "north" or door_side == "north_south"), true)
+    _wall_with_door(room, "South", Vector3(0, h * 0.5, d * 0.5), w, h, t, (door_side == "south" or door_side == "north_south"), true)
     _wall_with_door(room, "West", Vector3(-w * 0.5, h * 0.5, 0), d, h, t, door_side == "west", false)
     _wall_with_door(room, "East", Vector3(w * 0.5, h * 0.5, 0), d, h, t, door_side == "east", false)
     _label(room, name.to_upper(), Vector3(0, 2.5, 0), 0.7)
@@ -112,7 +112,9 @@ func _build_courtyard() -> void:
     _box(area, "CourtyardGround", Vector3(0, -0.16, 0), Vector3(16, 0.32, 16), floor_mat)
     _label(area, "CENTRAL COURTYARD", Vector3(0, 3.1, -1), 0.8)
     for x in [-7.5, 7.5]:
-        _box(area, "CourtyardBoundary", Vector3(x, 1.8, 0), Vector3(0.3, 3.6, 16), concrete)
+        _box(area, "CourtyardBoundaryA", Vector3(x, 1.8, -4.5), Vector3(0.3, 3.6, 7), concrete)
+        _box(area, "CourtyardBoundaryB", Vector3(x, 1.8, 4.5), Vector3(0.3, 3.6, 7), concrete)
+        _box(area, "CourtyardSideLintel", Vector3(x, 3.55, 0), Vector3(0.3, 0.5, 2), concrete)
     _box(area, "NorthBoundaryLeft", Vector3(-4.5, 1.8, -8), Vector3(7, 3.6, 0.3), concrete)
     _box(area, "NorthBoundaryRight", Vector3(4.5, 1.8, -8), Vector3(7, 3.6, 0.3), concrete)
     _box(area, "SouthBoundaryLeft", Vector3(-4.5, 1.8, 8), Vector3(7, 3.6, 0.3), concrete)
@@ -153,7 +155,7 @@ func _build_laundry() -> void:
         _box(self, "LaundryTable", Vector3(x, 0.8, -18), Vector3(2.2, 0.2, 2.0), wood)
 
 func _build_admin() -> void:
-    _room("Administration", Vector3(0, 0, 7), Vector2(12, 8), "south")
+    _room("Administration", Vector3(0, 0, 7), Vector2(12, 8), "north_south")
     _box(self, "OfficeDesk", Vector3(0, 0.8, 6), Vector3(4.0, 0.2, 1.6), wood)
     _box(self, "NoticeBoard", Vector3(0, 2.0, 3.2), Vector3(3.0, 1.5, 0.12), dark_concrete)
 
@@ -168,8 +170,10 @@ func _build_yard() -> void:
         _box(yard, "YardFenceBase", Vector3(x, 0.6, 0), Vector3(0.3, 1.2, 12), dark_concrete)
         for z in range(-5, 6):
             _box(yard, "FencePost", Vector3(x, 2.0, z), Vector3(0.12, 2.8, 0.12), metal)
-    for z in [-6.0, 6.0]:
-        _box(yard, "YardFence", Vector3(0, 1.8, z), Vector3(22, 3.6, 0.25), dark_concrete)
+    _box(yard, "YardFenceNorthLeft", Vector3(-6, 1.8, -6), Vector3(10, 3.6, 0.25), dark_concrete)
+    _box(yard, "YardFenceNorthRight", Vector3(6, 1.8, -6), Vector3(10, 3.6, 0.25), dark_concrete)
+    _box(yard, "YardFenceNorthLintel", Vector3(0, 3.55, -6), Vector3(2, 0.5, 0.25), dark_concrete)
+    _box(yard, "YardFenceSouth", Vector3(0, 1.8, 6), Vector3(22, 3.6, 0.25), dark_concrete)
     _box(yard, "GardenBed", Vector3(-5, 0.15, 0), Vector3(5, 0.3, 3), wood)
     _box(yard, "GardenSoil", Vector3(-5, 0.34, 0), Vector3(4.7, 0.12, 2.7), _mat(Color(0.20, 0.15, 0.10)), false)
     _box(yard, "Bench", Vector3(5, 0.55, 0), Vector3(3, 0.2, 0.7), wood)
