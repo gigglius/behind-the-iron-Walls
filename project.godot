@@ -1,0 +1,16 @@
+; Engine configuration file.
+; Starter project for Godot 4.x
+config_version=5
+
+[application]
+config/name="1960: Behind the Iron Walls"
+run/main_scene="res://scenes/Main.tscn"
+
+[rendering]
+renderer/rendering_method="mobile"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/default_filters/use_nearest_mipmap_filter=false
+
+[display]
+window/size/viewport_width=1280
+window/size/viewport_height=720
