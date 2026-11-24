@@ -1,18 +1,41 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="1_manager"]
+[ext_resource type="Script" path="res://scripts/food_system.gd" id="2_food"]
+[ext_resource type="Script" path="res://scripts/job_system.gd" id="3_jobs"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="4_hud"]
+[ext_resource type="Script" path="res://scripts/player_controller.gd" id="5_player"]
+[ext_resource type="Script" path="res://scripts/work_office.gd" id="6_office"]
+[ext_resource type="Script" path="res://scripts/work_station.gd" id="7_station"]
+[ext_resource type="Script" path="res://scripts/npc.gd" id="8_npc"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_manager")
+
+[node name="FoodSystem" type="Node" parent="."]
+script = ExtResource("2_food")
+
+[node name="JobSystem" type="Node" parent="."]
+script = ExtResource("3_jobs")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("4_hud")
 
 [node name="Environment" type="WorldEnvironment" parent="."]
 
 [node name="PrisonBlock" type="Node3D" parent="."]
 position = Vector3(0, 0, -5)
 
-[node name="CourtyardFloor" type="MeshInstance3D" parent="PrisonBlock"]
+[node name="CourtyardFloor" type="StaticBody3D" parent="PrisonBlock"]
+position = Vector3(0, -0.15, 0)
+
+[node name="FloorMesh" type="MeshInstance3D" parent="PrisonBlock/CourtyardFloor"]
 mesh = PlaneMesh.new()
 scale = Vector3(16, 1, 16)
+
+[node name="FloorCollision" type="CollisionShape3D" parent="PrisonBlock/CourtyardFloor"]
+shape = BoxShape3D.new()
+scale = Vector3(16, 0.3, 16)
 
 [node name="NorthWall" type="StaticBody3D" parent="PrisonBlock"]
 position = Vector3(0, 2, -8)
@@ -21,8 +44,13 @@ position = Vector3(0, 2, -8)
 mesh = BoxMesh.new()
 scale = Vector3(16, 4, 0.4)
 
+[node name="WallCollision" type="CollisionShape3D" parent="PrisonBlock/NorthWall"]
+shape = BoxShape3D.new()
+scale = Vector3(16, 4, 0.4)
+
 [node name="Player" type="CharacterBody3D" parent="."]
 position = Vector3(0, 1, 2)
+script = ExtResource("5_player")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
 shape = CapsuleShape3D.new()
@@ -32,3 +60,43 @@ position = Vector3(0, 0.65, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Player/Head"]
 current = true
+
+[node name="WorkOffice" type="Area3D" parent="."]
+position = Vector3(0, 1, -2)
+script = ExtResource("6_office")
+
+[node name="KitchenStation" type="Area3D" parent="."]
+position = Vector3(-3, 1, -4)
+script = ExtResource("7_station")
+job_id = "kitchen"
+station_name = "Kitchen counter"
+
+[node name="LaundryStation" type="Area3D" parent="."]
+position = Vector3(-1, 1, -4)
+script = ExtResource("7_station")
+job_id = "laundry"
+station_name = "Laundry table"
+
+[node name="LibraryStation" type="Area3D" parent="."]
+position = Vector3(1, 1, -4)
+script = ExtResource("7_station")
+job_id = "library"
+station_name = "Library shelves"
+
+[node name="WorkshopStation" type="Area3D" parent="."]
+position = Vector3(3, 1, -4)
+script = ExtResource("7_station")
+job_id = "workshop"
+station_name = "Workshop bench"
+
+[node name="GardeningStation" type="Area3D" parent="."]
+position = Vector3(5, 1, -4)
+script = ExtResource("7_station")
+job_id = "gardener"
+station_name = "Garden plot"
+
+[node name="PrisonerNPC" type="Area3D" parent="."]
+position = Vector3(2, 1, 1)
+script = ExtResource("8_npc")
+character_name = "Mikhail"
+opening_line = "I work in the library. The work office has a job board if you need a position."
