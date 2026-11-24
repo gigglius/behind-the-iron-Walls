@@ -24,6 +24,10 @@ script = ExtResource("4_hud")
 
 [node name="Environment" type="WorldEnvironment" parent="."]
 
+[node name="SunLight" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-45, 35, 0)
+light_energy = 1.2
+
 [node name="PrisonBlock" type="Node3D" parent="."]
 position = Vector3(0, 0, -5)
 
