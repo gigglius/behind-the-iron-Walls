@@ -33,3 +33,7 @@ Enable the OpenXR plugin / XR runtime in Godot, configure an Android export pres
 - F: collect nearby bread
 
 VR controller input and hand tracking are intentionally left as the next implementation milestone.
+
+
+## Prison map
+A connected low-poly prison greybox now includes the central courtyard, cell block, dining hall, kitchen, workshop, laundry, administration, and exercise yard. See [docs/PRISON_MAP.md](docs/PRISON_MAP.md) for the layout and editing notes.
