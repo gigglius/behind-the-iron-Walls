@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="1_manager"]
 [ext_resource type="Script" path="res://scripts/food_system.gd" id="2_food"]
@@ -10,9 +10,14 @@
 [ext_resource type="Script" path="res://scripts/npc.gd" id="8_npc"]
 [ext_resource type="Script" path="res://scripts/bread_pickup.gd" id="9_bread"]
 [ext_resource type="PackedScene" path="res://scenes/player/PlayerModel.tscn" id="10_player_model"]
+[ext_resource type="Script" path="res://scripts/xr_bootstrap.gd" id="11_xr_bootstrap"]
+[ext_resource type="PackedScene" path="res://scenes/ui/VRCharacterCreator.tscn" id="12_creator"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_manager")
+
+[node name="XRBootstrap" type="Node" parent="."]
+script = ExtResource("11_xr_bootstrap")
 
 [node name="FoodSystem" type="Node" parent="."]
 script = ExtResource("2_food")
@@ -58,7 +63,9 @@ scale = Vector3(16, 4, 0.4)
 position = Vector3(0, 1, 2)
 script = ExtResource("5_player")
 
-[node name="PlayerModel" parent="Player" instance=ExtResource("10_player_model")]\n\n[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+[node name="PlayerModel" parent="Player" instance=ExtResource("10_player_model")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
 shape = CapsuleShape3D.new()
 
 [node name="Head" type="Node3D" parent="Player"]
@@ -66,6 +73,24 @@ position = Vector3(0, 0.65, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Player/Head"]
 current = true
+
+[node name="XROrigin3D" type="XROrigin3D" parent="Player"]
+
+[node name="XRCamera3D" type="XRCamera3D" parent="Player/XROrigin3D"]
+current = false
+
+[node name="LeftHand" type="XRController3D" parent="Player/XROrigin3D"]
+tracker = &"left_hand"
+pose = &"aim"
+
+[node name="RightHand" type="XRController3D" parent="Player/XROrigin3D"]
+tracker = &"right_hand"
+pose = &"aim"
+
+[node name="VRCharacterCreator" parent="Player/XROrigin3D" instance=ExtResource("12_creator")]
+left_controller_path = NodePath("../LeftHand")
+right_controller_path = NodePath("../RightHand")
+player_model_path = NodePath("../../PlayerModel")
 
 [node name="WorkOffice" type="Area3D" parent="."]
 position = Vector3(0, 1, -2)
