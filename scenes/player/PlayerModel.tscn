@@ -1,0 +1,93 @@
+[gd_scene load_steps=12 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Mat_Uniform"]
+albedo_color = Color(0.36, 0.39, 0.34, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="Mat_Shirt"]
+albedo_color = Color(0.62, 0.58, 0.46, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_Boots"]
+albedo_color = Color(0.12, 0.11, 0.1, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Mat_Skin"]
+albedo_color = Color(0.68, 0.48, 0.36, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_Belt"]
+albedo_color = Color(0.16, 0.14, 0.11, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="TorsoMesh"]
+size = Vector3(0.48, 0.62, 0.26)
+material = SubResource("Mat_Uniform")
+
+[sub_resource type="CapsuleMesh" id="ArmMesh"]
+radius = 0.085
+height = 0.62
+material = SubResource("Mat_Shirt")
+
+[sub_resource type="CapsuleMesh" id="LegMesh"]
+radius = 0.105
+height = 0.72
+material = SubResource("Mat_Uniform")
+
+[sub_resource type="BoxMesh" id="BootMesh"]
+size = Vector3(0.16, 0.13, 0.28)
+material = SubResource("Mat_Boots")
+
+[sub_resource type="BoxMesh" id="BeltMesh"]
+size = Vector3(0.5, 0.07, 0.29)
+material = SubResource("Mat_Belt")
+
+[sub_resource type="SphereMesh" id="HandMesh"]
+radius = 0.085
+height = 0.17
+material = SubResource("Mat_Skin")
+
+[node name="PrisonerPlayerModel" type="Node3D"]
+## Stylized 1960s prison uniform. Head intentionally omitted for first-person VR comfort.
+
+[node name="Torso" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.12, 0)
+mesh = SubResource("TorsoMesh")
+
+[node name="Belt" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.83, 0)
+mesh = SubResource("BeltMesh")
+
+[node name="LeftArm" type="MeshInstance3D" parent="."]
+position = Vector3(-0.31, 1.04, 0)
+rotation_degrees = Vector3(0, 0, -9)
+mesh = SubResource("ArmMesh")
+
+[node name="RightArm" type="MeshInstance3D" parent="."]
+position = Vector3(0.31, 1.04, 0)
+rotation_degrees = Vector3(0, 0, 9)
+mesh = SubResource("ArmMesh")
+
+[node name="LeftHand" type="MeshInstance3D" parent="."]
+position = Vector3(-0.34, 0.71, 0)
+mesh = SubResource("HandMesh")
+
+[node name="RightHand" type="MeshInstance3D" parent="."]
+position = Vector3(0.34, 0.71, 0)
+mesh = SubResource("HandMesh")
+
+[node name="LeftLeg" type="MeshInstance3D" parent="."]
+position = Vector3(-0.13, 0.43, 0)
+mesh = SubResource("LegMesh")
+
+[node name="RightLeg" type="MeshInstance3D" parent="."]
+position = Vector3(0.13, 0.43, 0)
+mesh = SubResource("LegMesh")
+
+[node name="LeftBoot" type="MeshInstance3D" parent="."]
+position = Vector3(-0.13, 0.1, -0.045)
+mesh = SubResource("BootMesh")
+
+[node name="RightBoot" type="MeshInstance3D" parent="."]
+position = Vector3(0.13, 0.1, -0.045)
+mesh = SubResource("BootMesh")
