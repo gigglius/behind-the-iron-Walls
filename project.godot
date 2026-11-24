@@ -37,5 +37,9 @@ eat_food={
 
 [rendering]
 renderer/rendering_method="mobile"
-renderer/rendering_method.mobile="gl_compatibility"
+renderer/rendering_method.mobile="mobile"
 textures/default_filters/use_nearest_mipmap_filter=false
+
+[xr]
+openxr/enabled=true
+shaders/enabled=true
