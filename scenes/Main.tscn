@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="1_manager"]
 [ext_resource type="Script" path="res://scripts/food_system.gd" id="2_food"]
@@ -34,30 +34,9 @@ script = ExtResource("4_hud")
 rotation_degrees = Vector3(-45, 35, 0)
 light_energy = 1.2
 
-[node name="PrisonBlock" type="Node3D" parent="."]
-position = Vector3(0, 0, -5)
+[ext_resource type="PackedScene" path="res://scenes/PrisonMap.tscn" id="13_map"]
 
-[node name="CourtyardFloor" type="StaticBody3D" parent="PrisonBlock"]
-position = Vector3(0, -0.15, 0)
-
-[node name="FloorMesh" type="MeshInstance3D" parent="PrisonBlock/CourtyardFloor"]
-mesh = PlaneMesh.new()
-scale = Vector3(16, 1, 16)
-
-[node name="FloorCollision" type="CollisionShape3D" parent="PrisonBlock/CourtyardFloor"]
-shape = BoxShape3D.new()
-scale = Vector3(16, 0.3, 16)
-
-[node name="NorthWall" type="StaticBody3D" parent="PrisonBlock"]
-position = Vector3(0, 2, -8)
-
-[node name="WallMesh" type="MeshInstance3D" parent="PrisonBlock/NorthWall"]
-mesh = BoxMesh.new()
-scale = Vector3(16, 4, 0.4)
-
-[node name="WallCollision" type="CollisionShape3D" parent="PrisonBlock/NorthWall"]
-shape = BoxShape3D.new()
-scale = Vector3(16, 4, 0.4)
+[node name="PrisonMap" parent="." instance=ExtResource("13_map")]
 
 [node name="Player" type="CharacterBody3D" parent="."]
 position = Vector3(0, 1, 2)
