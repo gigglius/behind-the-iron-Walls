@@ -1,6 +1,6 @@
 # Quest 3 VR Character Creator
 
-The character creator is a world-space 3D panel intended to be added beneath the game's `XROrigin3D` node.
+The main scene now contains an XR rig with an `XROrigin3D`, `XRCamera3D`, left and right `XRController3D` nodes, and the world-space character creator. The `scripts/xr_bootstrap.gd` script attempts to initialize OpenXR at startup and switches to the headset camera when initialization succeeds.
 
 ## Appearance options
 - Hairstyle: short, side part, buzz cut
@@ -10,15 +10,20 @@ The character creator is a world-space 3D panel intended to be added beneath the
 - Skin tone: light, medium, deep
 - Accessories: none, glasses, cap
 
-## Scene setup
-1. Open `scenes/ui/VRCharacterCreator.tscn` in Godot 4.
-2. Add the scene beneath the XR rig so its panel appears in front of the player.
-3. In the Inspector, set `left_controller_path` and `right_controller_path` to the rig's left and right `XRController3D` nodes.
-4. Set `player_model_path` to the player model node. The default path assumes the creator is a child of the XR origin and the player is a sibling branch; adjust it to match the actual rig.
-5. In Project Settings > XR > OpenXR, create a Bool action named `creator_select` and bind it to the trigger input in the Touch controller interaction profile. Also create a Bool action named `creator_toggle` and bind it to the left controller menu button. The script reads these actions through `XRController3D.get_float()`; OpenXR supports reading Bool actions through the float accessor. Use the left menu button to show or hide the creator, then point either controller at an option and squeeze its trigger to cycle that setting.
-6. Enable OpenXR and configure the Quest 3 Android export preset before device testing.
+## Quest 3 setup
+1. Open the project in Godot 4 and install/configure the Android export templates.
+2. In Project Settings > XR > OpenXR, confirm OpenXR is enabled, Form Factor is Head Mounted, and View Configuration is Stereo. The project file enables OpenXR and XR shaders; restart the editor after changing XR settings.
+3. Open the XR Action Map editor. Add Float actions named `creator_select` and `creator_toggle`.
+4. Bind `creator_select` to the trigger on both Touch controllers. Bind `creator_toggle` to the left controller menu button. The script reads both actions with `XRController3D.get_float()`.
+5. The main scene already instances the XR origin, camera, controller nodes, and creator scene. The left menu button shows/hides the creator. Point either controller at a category and press its trigger to cycle through that category's choices.
+6. Configure an Android export preset for Quest 3, then run and test on the headset.
 
-The creator uses controller pointing rays and a trigger press. Its preview avatar has a visible head; the first-person player avatar keeps its head hidden to avoid camera clipping. The selected appearance is copied to the live player model when an option is changed.
+## Implementation notes
+- The creator's preview avatar has a visible head; the first-person player avatar keeps its head hidden to avoid camera clipping.
+- Appearance selections are applied to the live player model and mirrored on the preview.
+- The XR bootstrap leaves the desktop camera active if OpenXR cannot initialize.
 
 ## Testing status
-The files are committed as a starter implementation, but the scene has not yet been imported or run in Godot and has not been tested on a Quest 3. Confirm the node paths and action binding in the actual XR rig before treating controller input as verified.
+The integration is committed but has not been imported/run in Godot or tested on a Quest 3. The XR action bindings and Android export preset still need to be checked in the Godot editor. Do not treat controller input or headset startup as verified until tested on-device.
+
+References: [Godot XR setup](https://docs.godotengine.org/en/stable/tutorials/xr/setting_up_xr.html), [OpenXR settings](https://docs.godotengine.org/en/stable/tutorials/xr/openxr_settings.html), [XR action map](https://docs.godotengine.org/en/stable/tutorials/xr/xr_action_map.html).
