@@ -6,6 +6,8 @@ extends Node3D
 @export_node_path("XRController3D") var left_controller_path: NodePath
 @export_node_path("XRController3D") var right_controller_path: NodePath
 @export var select_action: StringName = &"creator_select"
+@export var toggle_action: StringName = &"creator_toggle"
+var previous_toggle := false
 @export var player_model_path: NodePath = NodePath("../../Player/PlayerModel")
 
 const MODEL_SCENE: PackedScene = preload("res://scenes/player/PlayerModel.tscn")
@@ -107,8 +109,15 @@ func _refresh_labels() -> void:
 			labels[id].text = str(category["title"]) + ": " + str(player_model.get_customization_name(id))
 
 func _process(_delta: float) -> void:
-	_check_controller("left", get_node_or_null(left_controller_path) as XRController3D)
-	_check_controller("right", get_node_or_null(right_controller_path) as XRController3D)
+	var left_controller := get_node_or_null(left_controller_path) as XRController3D
+	var right_controller := get_node_or_null(right_controller_path) as XRController3D
+	if left_controller != null:
+		var toggle_pressed := left_controller.get_float(toggle_action) > 0.7
+		if toggle_pressed and not previous_toggle:
+			visible = not visible
+		previous_toggle = toggle_pressed
+	_check_controller("left", left_controller)
+	_check_controller("right", right_controller)
 
 func _check_controller(hand: String, controller: XRController3D) -> void:
 	if controller == null:
@@ -135,6 +144,6 @@ func _try_select(controller: XRController3D) -> void:
 		status_label.text = "Player model reference not set"
 		return
 	player_model.cycle_customization(category)
-	preview_model.apply_selection_dictionary(player_model.selected)
+	preview_model.call("apply_selection_dictionary", player_model.get("selected"))
 	_refresh_labels()
 	status_label.text = "Updated " + category.replace("_", " ")
