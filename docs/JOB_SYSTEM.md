@@ -30,3 +30,17 @@ The prison uses a hybrid system: a character may apply for an available job by s
 ## Implementation
 
 The initial logic lives in `scripts/job_system.gd`. It exposes signals for job changes, task progress, completion, and messages. The game scene can connect `job_completed` to the food system's `collect(bread_reward)` method and display work credits in the HUD.
+
+## Connected prototype interactions
+
+The main scene now includes:
+- A work-office character that opens the job board.
+- Five matching workstations: kitchen, laundry, library, workshop, and gardening.
+- A task counter shown in the HUD.
+- Food rewards wired to the food meter when a full shift is completed.
+- A bread pickup in the courtyard.
+- A neutral prisoner NPC for dialogue.
+
+Desktop test flow: walk to the work office, press E, choose a job with keys 1–5, then walk to the matching station and press E the required number of times. Press N to begin another workday. Press F to eat a food portion.
+
+The current interaction ray is driven by the desktop camera. Quest controller ray interaction and a world-space VR HUD remain a separate OpenXR integration milestone; this repository is not yet a finished Quest APK.
