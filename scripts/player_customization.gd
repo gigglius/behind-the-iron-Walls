@@ -101,14 +101,14 @@ func _apply_category(category: String) -> void:
 		"shirt":
 			_set_material_color(["LeftArm", "RightArm"], choice["color"])
 		"skin":
-			_set_material_color(["LeftHand", "RightHand", "HeadMesh", "EarLeft", "EarRight"], choice["color"])
+			_set_material_color(["LeftHand", "RightHand", "Head/HeadMesh"], choice["color"])
 		"boots":
 			_set_material_color(["LeftBoot", "RightBoot"], choice["color"])
 		"hair_color":
-			_set_material_color(["HairShort", "HairPart", "HairBuzz", "HairTop"], choice["color"])
+			_set_material_color(["Head/HairShort", "Head/HairPart", "Head/HairBuzz", "Head/HairTop"], choice["color"])
 		"hair_style":
-			_show_one(["HairShort", "HairPart", "HairBuzz"], choice["node"])
+			_show_one(["Head/HairShort", "Head/HairPart", "Head/HairBuzz"], choice["node"])
 		"face":
-			_show_one(["FaceClean", "FaceMoustache", "FaceStubble"], choice["node"])
+			_show_one(["Head/FaceClean", "Head/FaceMoustache", "Head/FaceStubble"], choice["node"])
 		"accessory":
-			_show_one(["AccessoryNone", "AccessoryGlasses", "AccessoryCap"], choice["node"])
+			_show_one(["Head/AccessoryNone", "Head/AccessoryGlasses", "Head/AccessoryCap"], choice["node"])
