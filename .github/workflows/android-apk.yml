@@ -14,28 +14,37 @@ jobs:
       - name: Check out project
         uses: actions/checkout@v4
 
+      - name: Install build utilities
+        run: |
+          apt-get update
+          apt-get install -y curl unzip
+
       - name: Configure Java, Android SDK, export templates, and debug signing
         shell: bash
         run: |
           set -euxo pipefail
           export JAVA_HOME="$(dirname "$(dirname "$(readlink -f "$(command -v javac)")")")"
-          export ANDROID_HOME="${ANDROID_HOME:-/usr/lib/android-sdk}"
-          export ANDROID_SDK_ROOT="$ANDROID_HOME"
+          SDK_PATH=""
+          for candidate in /usr/lib/android-sdk /opt/android-sdk /root/android-sdk /android-sdk /usr/local/android-sdk; do
+            if [ -d "$candidate/platform-tools" ] || [ -d "$candidate/platforms" ]; then SDK_PATH="$candidate"; break; fi
+          done
+          if [ -z "$SDK_PATH" ]; then
+            echo "Android SDK not found in expected image paths"
+            find / -maxdepth 4 -type d -name 'platform-tools' 2>/dev/null | head -20
+            exit 1
+          fi
+          export ANDROID_HOME="$SDK_PATH"
+          export ANDROID_SDK_ROOT="$SDK_PATH"
           echo "JAVA_HOME=$JAVA_HOME" >> "$GITHUB_ENV"
           echo "ANDROID_HOME=$ANDROID_HOME" >> "$GITHUB_ENV"
-          echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> "$GITHUB_ENV"
 
           mkdir -p "$HOME/.local/share/godot/export_templates/4.4.1.stable"
-          curl -fL --retry 3 \
-            https://github.com/godotengine/godot/releases/download/4.4.1-stable/Godot_v4.4.1-stable_export_templates.tpz \
-            -o /tmp/godot-templates.tpz
+          curl -fL --retry 3 https://github.com/godotengine/godot/releases/download/4.4.1-stable/Godot_v4.4.1-stable_export_templates.tpz -o /tmp/godot-templates.tpz
           unzip -q /tmp/godot-templates.tpz -d /tmp/godot-templates
           cp /tmp/godot-templates/templates/* "$HOME/.local/share/godot/export_templates/4.4.1.stable/"
 
-          keytool -genkeypair -v -keystore "$GITHUB_WORKSPACE/debug.keystore" \
-            -storepass android -alias androiddebugkey -keypass android \
-            -keyalg RSA -keysize 2048 -validity 10000 \
-            -dname "CN=Android Debug,O=Android,C=US"
+          keytool -genkeypair -v -keystore "$GITHUB_WORKSPACE/debug.keystore" -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
           sed -i "s|__DEBUG_KEYSTORE__|$GITHUB_WORKSPACE/debug.keystore|g" export_presets.cfg
 
       - name: Import project resources
