@@ -1,8 +1,12 @@
 extends Area3D
-## Friendly / neutral NPC dialogue stub. Dialogue can later branch by quest state.
-
+## Neutral character interaction. Work-office staff use work_office.gd instead.
 @export var character_name: String = "Prisoner"
-@export_multiline var opening_line: String = "Keep your head down. The courtyard is watched."
-
+@export_multiline var opening_line: String = "The kitchen has been busy today."
+func _ready() -> void:
+	var collision := CollisionShape3D.new()
+	var shape := SphereShape3D.new()
+	shape.radius = 1.0
+	collision.shape = shape
+	add_child(collision)
 func interact(_actor: Node) -> String:
 	return "%s: %s" % [character_name, opening_line]
