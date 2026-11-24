@@ -1,5 +1,5 @@
 extends Node3D
-## Runtime appearance customization for the first-person prisoner model.
+## Appearance data and mesh updates shared by the player and creator preview.
 
 const OPTIONS := {
 	"uniform": [
@@ -23,10 +23,34 @@ const OPTIONS := {
 		{"name": "Black", "color": Color(0.12, 0.11, 0.10)},
 		{"name": "Brown", "color": Color(0.28, 0.17, 0.10)},
 		{"name": "Dark grey", "color": Color(0.22, 0.23, 0.24)}
+	],
+	"hair_style": [
+		{"name": "Short", "node": "HairShort"},
+		{"name": "Side part", "node": "HairPart"},
+		{"name": "Buzz cut", "node": "HairBuzz"}
+	],
+	"hair_color": [
+		{"name": "Dark brown", "color": Color(0.12, 0.075, 0.045)},
+		{"name": "Black", "color": Color(0.035, 0.03, 0.025)},
+		{"name": "Sandy", "color": Color(0.48, 0.34, 0.18)},
+		{"name": "Auburn", "color": Color(0.35, 0.12, 0.055)}
+	],
+	"face": [
+		{"name": "Clean shaven", "node": "FaceClean"},
+		{"name": "Moustache", "node": "FaceMoustache"},
+		{"name": "Stubble", "node": "FaceStubble"}
+	],
+	"accessory": [
+		{"name": "None", "node": "AccessoryNone"},
+		{"name": "Glasses", "node": "AccessoryGlasses"},
+		{"name": "Cap", "node": "AccessoryCap"}
 	]
 }
 
-var selected := {"uniform": 0, "shirt": 0, "skin": 1, "boots": 0}
+var selected := {
+	"uniform": 0, "shirt": 0, "skin": 1, "boots": 0,
+	"hair_style": 0, "hair_color": 0, "face": 0, "accessory": 0
+}
 
 func _ready() -> void:
 	_apply_all()
@@ -44,26 +68,47 @@ func get_customization_name(category: String) -> String:
 		return ""
 	return str(OPTIONS[category][int(selected[category])]["name"])
 
+func apply_selection_dictionary(values: Dictionary) -> void:
+	for category in OPTIONS:
+		if values.has(category):
+			selected[category] = clampi(int(values[category]), 0, OPTIONS[category].size() - 1)
+	_apply_all()
+
 func _apply_all() -> void:
 	for category in OPTIONS:
 		_apply_category(category)
 
-func _apply_category(category: String) -> void:
-	var color: Color = OPTIONS[category][int(selected[category])]["color"]
+func _set_material_color(node_names: Array, color: Color) -> void:
 	var material := StandardMaterial3D.new()
 	material.albedo_color = color
 	material.roughness = 0.92
-	var node_names: Array[String] = []
-	match category:
-		"uniform":
-			node_names = ["Torso", "LeftLeg", "RightLeg"]
-		"shirt":
-			node_names = ["LeftArm", "RightArm"]
-		"skin":
-			node_names = ["LeftHand", "RightHand"]
-		"boots":
-			node_names = ["LeftBoot", "RightBoot"]
 	for node_name in node_names:
-		var part := get_node_or_null(node_name) as MeshInstance3D
+		var part := get_node_or_null(str(node_name)) as MeshInstance3D
 		if part != null:
 			part.material_override = material
+
+func _show_one(node_names: Array, selected_node: String) -> void:
+	for node_name in node_names:
+		var part := get_node_or_null(str(node_name))
+		if part != null:
+			part.visible = str(node_name) == selected_node
+
+func _apply_category(category: String) -> void:
+	var choice: Dictionary = OPTIONS[category][int(selected[category])]
+	match category:
+		"uniform":
+			_set_material_color(["Torso", "LeftLeg", "RightLeg"], choice["color"])
+		"shirt":
+			_set_material_color(["LeftArm", "RightArm"], choice["color"])
+		"skin":
+			_set_material_color(["LeftHand", "RightHand", "HeadMesh", "EarLeft", "EarRight"], choice["color"])
+		"boots":
+			_set_material_color(["LeftBoot", "RightBoot"], choice["color"])
+		"hair_color":
+			_set_material_color(["HairShort", "HairPart", "HairBuzz", "HairTop"], choice["color"])
+		"hair_style":
+			_show_one(["HairShort", "HairPart", "HairBuzz"], choice["node"])
+		"face":
+			_show_one(["FaceClean", "FaceMoustache", "FaceStubble"], choice["node"])
+		"accessory":
+			_show_one(["AccessoryNone", "AccessoryGlasses", "AccessoryCap"], choice["node"])
