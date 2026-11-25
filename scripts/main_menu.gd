@@ -165,7 +165,12 @@ func _build_loading_overlay() -> void:
 func _build_xr_rig() -> void:
 	xr_origin = XROrigin3D.new()
 	xr_origin.name = "MenuXROrigin"
-	add_child(xr_origin)
+	# Keep XR cameras/controllers in the 3D world, not beneath the 2D Control canvas.
+	var world_root := get_parent() as Node3D
+	if world_root == null:
+		push_error("Main menu requires a Node3D world parent for its XR rig.")
+		return
+	world_root.add_child(xr_origin)
 
 	xr_camera = XRCamera3D.new()
 	xr_camera.name = "MenuXRCamera"
