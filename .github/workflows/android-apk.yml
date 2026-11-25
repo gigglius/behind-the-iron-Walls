@@ -53,7 +53,7 @@ jobs:
           SDKMANAGER="$(find "$ANDROID_HOME" -name sdkmanager -type f | head -1)"
           if [ -z "$SDKMANAGER" ]; then echo "sdkmanager not found under $ANDROID_HOME"; exit 1; fi
           yes | "$SDKMANAGER" --sdk_root="$ANDROID_HOME" --licenses || true
-          "$SDKMANAGER" --sdk_root="$ANDROID_HOME" "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+          "$SDKMANAGER" --sdk_root="$ANDROID_HOME" "platform-tools" "platforms;android-33" "build-tools;33.0.2" "ndk;23.2.8568313" "cmake;3.10.2.4988404"
 
           mkdir -p "$HOME/.local/share/godot/export_templates/4.4.1.stable"
           curl -fL --retry 3 https://github.com/godotengine/godot/releases/download/4.4.1-stable/Godot_v4.4.1-stable_export_templates.tpz -o /tmp/godot-templates.tpz
@@ -72,8 +72,8 @@ jobs:
           set -euxo pipefail
           godot --version
           mkdir -p build/android
-          # Godot installs the project-local Gradle template as part of an export command.
-          timeout 10m godot --headless --path . --install-android-build-template --export-debug "Android" build/android/TemplateSetup.apk
+          # Install the project-local Gradle template in editor mode before exporting.
+          timeout 10m godot --headless --editor --path . --install-android-build-template --quit
           test -d android/build
 
       - name: Export debug APK
