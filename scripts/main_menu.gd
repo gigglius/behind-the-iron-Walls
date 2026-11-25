@@ -163,13 +163,23 @@ func _build_loading_overlay() -> void:
 	loading_overlay.add_child(loading_bar)
 
 func _build_xr_rig() -> void:
-	xr_origin = XROrigin3D.new()
-	xr_origin.name = "MenuXROrigin"
-	# Keep XR cameras/controllers in the 3D world, not beneath the 2D Control canvas.
+	# Always create a real camera before attempting XR. Without this fallback,
+	# a failed OpenXR initialize leaves the Quest viewport with no active camera
+	# and the headset displays only the clear color (a blank gray screen).
 	var world_root := get_parent() as Node3D
 	if world_root == null:
-		push_error("Main menu requires a Node3D world parent for its XR rig.")
+		push_error("Main menu requires a Node3D world parent for its cameras.")
 		return
+
+	var fallback_camera := Camera3D.new()
+	fallback_camera.name = "MenuFallbackCamera"
+	fallback_camera.position = Vector3(0.0, 1.6, 4.0)
+	fallback_camera.rotation = Vector3(0.0, PI, 0.0)
+	fallback_camera.current = true
+	world_root.add_child(fallback_camera)
+
+	xr_origin = XROrigin3D.new()
+	xr_origin.name = "MenuXROrigin"
 	world_root.add_child(xr_origin)
 
 	xr_camera = XRCamera3D.new()
