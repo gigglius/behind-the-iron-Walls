@@ -40,7 +40,6 @@ jobs:
           echo "ANDROID_HOME=$ANDROID_HOME" >> "$GITHUB_ENV"
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> "$GITHUB_ENV"
 
-          # Godot reads Android SDK/JDK locations from EditorSettings, not only environment variables.
           mkdir -p "$HOME/.config/godot"
           cat > "$HOME/.config/godot/editor_settings-4.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
@@ -66,22 +65,13 @@ jobs:
       - name: Import project resources
         run: godot --headless --editor --path . --quit
 
-      - name: Install Godot Android build template
-        shell: bash
-        run: |
-          set -euxo pipefail
-          godot --version
-          mkdir -p build/android
-          # Install the project-local Gradle template in editor mode before exporting.
-          timeout 10m godot --headless --editor --path . --install-android-build-template --quit
-          test -d android/build
-
-      - name: Export debug APK
+      - name: Export debug APK and install Gradle template
         shell: bash
         run: |
           set -euxo pipefail
           mkdir -p build/android
-          godot --headless --path . --export-debug "Android" build/android/BehindTheIronWalls-debug.apk
+          # Godot's CLI installs the project-local Gradle template as part of export.
+          timeout 20m godot --headless --path . --install-android-build-template --export-debug "Android" build/android/BehindTheIronWalls-debug.apk
           test -s build/android/BehindTheIronWalls-debug.apk
 
       - name: Upload APK
