@@ -230,6 +230,10 @@ func _update_controller_pointer() -> void:
 
 	pointer.visible = true
 	pointer.position = screen_position - pointer.size * 0.5
+	var motion := InputEventMouseMotion.new()
+	motion.position = screen_position
+	motion.global_position = screen_position
+	Input.parse_input_event(motion)
 	var viewport_rect := get_viewport_rect()
 	if screen_position.x < 0.0 or screen_position.y < 0.0 or screen_position.x > viewport_rect.size.x or screen_position.y > viewport_rect.size.y:
 		pointer.visible = false
