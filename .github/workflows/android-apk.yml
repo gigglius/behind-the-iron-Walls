@@ -52,7 +52,7 @@ jobs:
           SDKMANAGER="$(find "$ANDROID_HOME" -name sdkmanager -type f | head -1)"
           if [ -z "$SDKMANAGER" ]; then echo "sdkmanager not found under $ANDROID_HOME"; exit 1; fi
           yes | "$SDKMANAGER" --sdk_root="$ANDROID_HOME" --licenses || true
-          "$SDKMANAGER" --sdk_root="$ANDROID_HOME" "platform-tools" "platforms;android-33" "build-tools;33.0.2" "ndk;23.2.8568313" "cmake;3.10.2.4988404"
+          "$SDKMANAGER" --sdk_root="$ANDROID_HOME" "platform-tools" "platforms;android-35" "build-tools;35.0.1" "ndk;23.2.8568313" "cmake;3.10.2.4988404"
 
           mkdir -p "$HOME/.local/share/godot/export_templates/4.4.1.stable"
           curl -fL --retry 3 https://github.com/godotengine/godot/releases/download/4.4.1-stable/Godot_v4.4.1-stable_export_templates.tpz -o /tmp/godot-templates.tpz
