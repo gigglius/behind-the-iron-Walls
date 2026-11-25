@@ -61,7 +61,10 @@ jobs:
         run: |
           set -euxo pipefail
           godot --version
-          timeout 5m godot --headless --editor --path . --install-android-build-template --quit
+          mkdir -p build/android
+          # Godot installs the project-local Gradle template as part of an export command.
+          timeout 10m godot --headless --path . --install-android-build-template --export-debug "Android" build/android/TemplateSetup.apk
+          test -d android/build
 
       - name: Export debug APK
         shell: bash
