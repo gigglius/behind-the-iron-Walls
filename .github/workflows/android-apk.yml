@@ -62,6 +62,19 @@ jobs:
           keytool -genkeypair -v -keystore "$GITHUB_WORKSPACE/debug.keystore" -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
           sed -i "s|__DEBUG_KEYSTORE__|$GITHUB_WORKSPACE/debug.keystore|g" export_presets.cfg
 
+      - name: Install Godot OpenXR Vendors plugin for Meta Quest
+        shell: bash
+        run: |
+          set -euxo pipefail
+          OPENXR_VENDORS_VERSION="4.3.1-stable"
+          curl -fL --retry 3 "https://github.com/GodotVR/godot_openxr_vendors/releases/download/${OPENXR_VENDORS_VERSION}/godotopenxrvendorsaddon.zip" -o /tmp/godotopenxrvendorsaddon.zip
+          mkdir -p /tmp/openxr-vendors addons
+          unzip -q /tmp/godotopenxrvendorsaddon.zip -d /tmp/openxr-vendors
+          test -d /tmp/openxr-vendors/asset/addons/godotopenxrvendors
+          rm -rf addons/godotopenxrvendors
+          cp -R /tmp/openxr-vendors/asset/addons/godotopenxrvendors addons/godotopenxrvendors
+          test -f addons/godotopenxrvendors/plugin.gdextension
+
       - name: Import project resources
         run: godot --headless --editor --path . --quit
 
